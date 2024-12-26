@@ -1,3 +1,7 @@
+# Local Builds
+www/index.js
+www/index.js.map
+
 # Logs
 logs
 *.log
@@ -127,4 +131,8 @@ dist
 .yarn/unplugged
 .yarn/build-state.yml
 .yarn/install-state.gz
+<<<<<<< HEAD
 .pnp.*
+=======
+.pnp.*
+>>>>>>> 143c983aabb17642c9642e9e41a7530c54b90ff3
