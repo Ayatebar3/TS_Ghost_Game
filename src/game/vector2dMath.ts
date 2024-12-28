@@ -1,7 +1,7 @@
 import { Vector2D } from "./components";
 
 export const Vector2DMath = (() => {
-  const sum = (A: Vector2D, B: Vector2D) => {
+  const sum = (A: Vector2D, B: Vector2D): Vector2D => {
     return new Vector2D(
       A.x + B.x,
       A.y + B.y

@@ -33,7 +33,7 @@ export const Render = (entityManager: EntityManager, gameScreen: HTMLCanvasEleme
     const health = enemy.getComponent(Health.name) as Health;
     gameScreenCtx.save();
     gameScreenCtx.lineWidth = ENEMY_SETTINGS.polygon_width;
-    gameScreenCtx.strokeStyle = ENEMY_SETTINGS.colors[health.value];
+    gameScreenCtx.strokeStyle = ENEMY_SETTINGS.colors[health.value - 1];
     gameScreenCtx.beginPath();
     gameScreenCtx.translate(
       position.x,
