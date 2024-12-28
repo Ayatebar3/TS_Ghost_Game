@@ -5,6 +5,9 @@ This game was written as a TypeScript (TS) implementation of "Assignment 2" from
 
 #### NOTE: This game is barely a Minimally Viable Product and is  still under development. See the [Upcoming Features](#upcoming-features) section to see what is to come :D.
 
+## Game Window
+![in_game_image](./In_Game_Screenshot.png)
+
 ## How To Play
 
 ### System Requirements
@@ -25,6 +28,9 @@ This game was written as a TypeScript (TS) implementation of "Assignment 2" from
 - Aiming and Shooting:
   - Mouse movement and left-click
   - Trackpad and Tap
+
+- Pausing:
+  - P to toggle pause/play
 
 ## Game Engine Design
 As described in the lectures, this game follows the "Entity Component Systems" _(ECS)_ design pattern, where Entities are objects in the game, Components are properties of the Entities, and Systems that act on the entities through their components.
@@ -67,9 +73,9 @@ As described in the lectures, this game follows the "Entity Component Systems" _
   - There are is no animation for player taking damage, enemy taking damage, or enemy destruction.
   - System requires a mechanism for displaying isolated animation sequences that are queued before re-renders, and dequeued after animation lifecycle.
 
-- Configurations
-  - The source files contain constant variables that configure player and enemy attributes like speed, spawn rate, etc. 
-  - It would be better to have a config file that contains these values, and are loaded into the game at start.
+- Gameplay Settings
+  - The source files has a config file `system_defaults.ts` that contains that configure player and enemy attributes like speed, spawn rate, etc.
+  - Users should be able to adjust these settings to increaase or decrease difficulty, change color palletes, etc.
 
 ### Gameplay
 

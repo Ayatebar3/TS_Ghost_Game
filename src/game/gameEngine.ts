@@ -22,6 +22,7 @@ export class GameEngine {
   private systems: System[];
   private player: Entity;
   private playerSprites: Sprite[];
+  private isPaused: boolean;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -29,6 +30,7 @@ export class GameEngine {
     this.systems = Systems(this.entityManager, this.canvas);
     this.player = new Entity(-1, "_TEMP_");
     this.playerSprites = [];
+    this.isPaused = false;
   }
 
   public init() {
@@ -72,6 +74,15 @@ export class GameEngine {
 
   private attachEventListeners() {
     const playerInput = this.player.getComponent(Input.name) as Input;
+
+    const addPausingInput = () => {
+      this.canvas.addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.key === 'p' || event.key === 'P') {
+          event.preventDefault();
+          this.isPaused = !this.isPaused;
+        }
+      })
+    }
 
     const addPlayerMovementInput = () => {
       const eventKeyToMovementMap = Object(PLAYER_SETTINGS.controls);
@@ -161,6 +172,7 @@ export class GameEngine {
         }
       })
     }
+    addPausingInput();
     addPlayerMovementInput();
     addPlayerMouseInput();
     // addManualEnemyCreator();
@@ -168,8 +180,10 @@ export class GameEngine {
 
   run() {
     const gameLoop = () => {
-      this.entityManager.update();
-      this.systems.forEach(system => system())
+      if (!this.isPaused) {
+        this.entityManager.update();
+        this.systems.forEach(system => system())
+      }
       requestAnimationFrame(gameLoop);
     }
     gameLoop();

@@ -18,7 +18,7 @@ const ctx = await esbuild.context({
   ...settings,
   minify: true,
   treeShaking: true,
-  sourcemap: true,
+  sourcemap: false,
 });
 
 await ctx.watch();
