@@ -9,8 +9,10 @@ import {
   Velocity
 } from "../components";
 import { EntityManager } from "../entityManager";
-import { ENEMY_SETTINGS } from "./system_defaults";
+import { ENEMY_SETTINGS, EntityType } from "./system_defaults";
 
+const MIN_VERTICES = 3;
+const MAX_VERTICES = 10;
 let previousTime = Date.now();
 
 export const EnemySpawner = (entityManager: EntityManager): System => () => {
@@ -23,11 +25,9 @@ export const EnemySpawner = (entityManager: EntityManager): System => () => {
   const currentTime = Date.now();
   const spawnTime = ENEMY_SETTINGS.spawn_time;
   if (currentTime - previousTime > spawnTime) {
-    const enemy = entityManager.addEntity('enemy');
+    const enemy = entityManager.addEntity(EntityType.ENEMY);
     const enemyRadius = ENEMY_SETTINGS.radius;
-    const minVertices = 3;
-    const maxVertices = 10;
-    const vertexCount = Math.floor(Math.random() * (maxVertices - minVertices)) + minVertices;
+    const vertexCount = Math.floor(Math.random() * (MAX_VERTICES - MIN_VERTICES + 1)) + MIN_VERTICES;
     const { x, y } = getEnemySpawnCoordinates(vertexCount);
     enemy.setComponents(
       new Position(x, y),

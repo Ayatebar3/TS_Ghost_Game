@@ -12,14 +12,8 @@ export class Entity {
     this._components = {};
   }
   setComponent(comp: Component) {
-    if (!comp) {
-      throw new Error("Entity.setComponent missing parameter 'component'")
-    }
-    if (!(comp instanceof Component)) {
-      throw new Error("Entity.setComponent input parameter 'component' must be an instance of Component")
-    }
-    if (comp.constructor === undefined) {
-      throw new Error("Entity.setComponent method can only take a component instance")
+    if (!(comp instanceof Component) || comp.constructor === undefined) {
+      throw new Error("Entity.setComponent input parameter must be an instance of Component")
     }
     this._components[comp.constructor.name] = comp;
   }

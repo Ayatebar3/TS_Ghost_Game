@@ -1,5 +1,5 @@
 import { System } from ".";
-import { ENEMY_SETTINGS } from "./system_defaults";
+import { ENEMY_SETTINGS, EntityType } from "./system_defaults";
 import { EntityManager } from "../entityManager";
 import { Vector2DMath } from "../vector2dMath";
 import {
@@ -9,9 +9,9 @@ import {
 } from "../components";
 
 export const EnemyMovement = (entityManager: EntityManager): System => () => {
-  const player = entityManager.getEntity('player');
+  const player = entityManager.getEntity(EntityType.PLAYER);
   const playerPosition = player.getComponent(Position.name) as Position;
-  for (const enemy of entityManager.getEntities('enemy')) {
+  for (const enemy of entityManager.getEntities(EntityType.ENEMY)) {
     const enemyPolygon = enemy.getComponent(RegularPolygon.name) as RegularPolygon;
     const enemyVelocity = enemy.getComponent(Velocity.name) as Velocity;
     const enemyPosition = enemy.getComponent(Position.name) as Position;

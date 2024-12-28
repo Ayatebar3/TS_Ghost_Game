@@ -84,3 +84,9 @@ export const ENEMY_SETTINGS = {
   spawn_coordinates: enemySpawnCoordinates,
   spawn_time: enemySpawnTime,
 }
+
+export enum EntityType {
+  PLAYER = "PLAYER",
+  BULLET = "BULLET",
+  ENEMY = "ENEMY"
+}

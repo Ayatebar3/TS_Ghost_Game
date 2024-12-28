@@ -27,7 +27,7 @@ export class EntityManager {
       }
     }
     const removeDeadEntites = () => {
-      const deadEntities = this._entities.filter(e => !e.isActive);
+      const deadEntities = this._entities.filter(entity => !entity.isActive);
       while (deadEntities.length) {
         const deadEntity = deadEntities.shift() as Entity;
         const tag = deadEntity.tag;
@@ -65,7 +65,7 @@ export class EntityManager {
 
   getEntity(tag: string): Entity {
     if (!(this.hasEntityType(tag))) {
-      throw new Error(`EntityManager.getEntity input parameter 'tag=${tag}' does not exist in Entity Map`);
+      throw new Error(`EntityManager.getEntity input parameter 'tag=${tag}' must be a valid EntityType`);
     }
     if (this._entitiesMap[tag] instanceof Array) {
       throw new Error(`EntityManager.getEntity attempted to get non-unique entity 'tag=${tag}' - Use EntityManager.getEntities(tag: string)`)

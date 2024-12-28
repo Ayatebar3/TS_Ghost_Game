@@ -9,14 +9,19 @@ import {
 } from "../components";
 import { Entity } from "../entity";
 import { EntityManager } from "../entityManager";
-import { BULLET_SETTINGS, ENEMY_SETTINGS, PLAYER_SETTINGS } from "./system_defaults";
+import {
+  BULLET_SETTINGS,
+  ENEMY_SETTINGS,
+  EntityType,
+  PLAYER_SETTINGS
+} from "./system_defaults";
 
-export const Render = (entityManager: EntityManager, canvas: HTMLCanvasElement): System => () => {
-  const gameScreenCtx = canvas.getContext('2d')!;
+export const Render = (entityManager: EntityManager, gameScreen: HTMLCanvasElement): System => () => {
+  const gameScreenCtx = gameScreen.getContext('2d')!;
 
   const clearScreen = () => {
     gameScreenCtx.save();
-    gameScreenCtx.clearRect(0, 0, canvas.width, canvas.height)
+    gameScreenCtx.clearRect(0, 0, gameScreen.width, gameScreen.height)
     // gameScreen.fillStyle = 'rgba(0, 0, 0, 0.5)'
     // gameScreen.fillRect(0, 0, canvas.width, canvas.height);
     gameScreenCtx.restore();
@@ -107,24 +112,24 @@ export const Render = (entityManager: EntityManager, canvas: HTMLCanvasElement):
   const drawPlayerStats = (player: Entity) => {
     const playerScore = player.getComponent(Score.name) as Score;
     const playerHealth = player.getComponent(Health.name) as Health;
-    gameScreenCtx.font = "36px serif";
+    gameScreenCtx.font = "40px serif";
     gameScreenCtx.fillStyle = "fuchsia";
-    gameScreenCtx.fillText(`Score: ${playerScore.value}`, canvas.width * 0.8, canvas.height * 0.1);
-    gameScreenCtx.fillText(`Health: ${playerHealth.value}`, canvas.width * 0.1, canvas.height * 0.1);
+    gameScreenCtx.fillText(`Score: ${playerScore.value}`, gameScreen.width * 0.8, gameScreen.height * 0.1);
+    gameScreenCtx.fillText(`Health: ${playerHealth.value}`, gameScreen.width * 0.1, gameScreen.height * 0.1);
   }
 
   clearScreen();
   for (const entity of entityManager.getEntities()) {
     switch (entity.tag) {
-      case 'player':
+      case EntityType.PLAYER:
         drawPlayer(entity);
         drawReticule(entity);
         drawPlayerStats(entity)
         break;
-      case 'bullet':
+      case EntityType.BULLET:
         drawBullet(entity);
         break;
-      case 'enemy':
+      case EntityType.ENEMY:
         drawEnemy(entity);
       default:
         break;

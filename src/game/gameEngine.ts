@@ -14,7 +14,7 @@ import {
 import { Entity } from "./entity";
 import { EntityManager } from "./entityManager";
 import { System, Systems } from "./systems";
-import { PLAYER_SETTINGS } from "./systems/system_defaults";
+import { EntityType, PLAYER_SETTINGS } from "./systems/system_defaults";
 
 export class GameEngine {
   private canvas: HTMLCanvasElement;
@@ -38,9 +38,9 @@ export class GameEngine {
   }
 
   private createEntityTypes() {
-    this.entityManager.addEntityType('player', true);
-    this.entityManager.addEntityType('bullet');
-    this.entityManager.addEntityType('enemy');
+    this.entityManager.addEntityType(EntityType.PLAYER, true);
+    this.entityManager.addEntityType(EntityType.BULLET);
+    this.entityManager.addEntityType(EntityType.ENEMY);
   }
 
   private createPlayerEntity() {
@@ -53,7 +53,7 @@ export class GameEngine {
     const spriteImages = Array.from(document.querySelectorAll('.player-sprite'))
       .map((s) => new Sprite(s as HTMLImageElement, playerWidth, playerHeight));
     this.playerSprites.push(...spriteImages);
-    this.player = this.entityManager.addEntity('player');
+    this.player = this.entityManager.addEntity(EntityType.PLAYER);
     this.player.setComponents(
       this.playerSprites[1],
       playerStartPosition,
@@ -74,11 +74,11 @@ export class GameEngine {
     const playerInput = this.player.getComponent(Input.name) as Input;
 
     const addPlayerMovementInput = () => {
-      const inputToMovementMap = Object(PLAYER_SETTINGS.controls);
-      this.canvas.addEventListener("keydown", (e) => {
-        if (e.key in inputToMovementMap) {
-          e.preventDefault();
-          const keyPressed = inputToMovementMap[e.key];
+      const eventKeyToMovementMap = Object(PLAYER_SETTINGS.controls);
+      this.canvas.addEventListener("keydown", (event: KeyboardEvent) => {
+        if (event.key in eventKeyToMovementMap) {
+          event.preventDefault();
+          const keyPressed = eventKeyToMovementMap[event.key];
           playerInput.movement[keyPressed as keyof MovementInput] = true;
           if (keyPressed === 'left') {
             this.setPlayerSprite(true);
@@ -87,25 +87,25 @@ export class GameEngine {
           }
         }
       });
-      this.canvas.addEventListener("keyup", (e) => {
-        if (e.key in inputToMovementMap) {
-          e.preventDefault();
-          const keyReleased = inputToMovementMap[e.key];
+      this.canvas.addEventListener("keyup", (event: KeyboardEvent) => {
+        if (event.key in eventKeyToMovementMap) {
+          event.preventDefault();
+          const keyReleased = eventKeyToMovementMap[event.key];
           playerInput.movement[keyReleased as keyof MovementInput] = false;
         }
       });
     }
 
     const addPlayerMouseInput = () => {
-      this.canvas.addEventListener("mousemove", (e) => {
-        e.preventDefault();
-        const mousePosition = getMouseOnCanvasPosition(e);
+      this.canvas.addEventListener("mousemove", (event: MouseEvent) => {
+        event.preventDefault();
+        const mousePosition = getMouseOnCanvasPosition(event);
         playerInput.mouse.position.x = mousePosition.x;
         playerInput.mouse.position.y = mousePosition.y;
       })
-      this.canvas.addEventListener("mousedown", (e) => {
-        e.preventDefault();
-        if (e.button === 0) {
+      this.canvas.addEventListener("mousedown", (event: MouseEvent) => {
+        event.preventDefault();
+        if (event.button === 0) {
           playerInput.mouse.leftClick = true;
         }
       })
@@ -146,7 +146,7 @@ export class GameEngine {
           e.preventDefault();
           for (let vertex = 3; vertex < 10; vertex++) {
             const vertexCount = vertex;
-            const enemy = this.entityManager.addEntity('enemy');
+            const enemy = this.entityManager.addEntity(EntityType.ENEMY);
             const x_rand = Math.floor(Math.random() * this.canvas.width - 2) + 1;
             const y_rand = Math.floor(Math.random() * this.canvas.height - 2) + 1;
             enemy.setComponents(

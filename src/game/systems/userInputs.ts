@@ -1,10 +1,11 @@
 import { System } from ".";
-import { BULLET_SETTINGS } from "./system_defaults";
+import { BULLET_SETTINGS, EntityType } from "./system_defaults";
 import { EntityManager } from "../entityManager";
 import { Vector2DMath } from "../vector2dMath";
 import {
   Damage,
   Input,
+  MovementInput,
   Position,
   Speed,
   Sprite,
@@ -13,27 +14,28 @@ import {
 } from "../components";
 
 export const UserInputs = (entityManager: EntityManager): System => () => {
-  const player = entityManager.getEntity('player');
+  const player = entityManager.getEntity(EntityType.PLAYER);
   const playerSprite = player.getComponent(Sprite.name) as Sprite;
   const playerPosition = player.getComponent(Position.name) as Position;
   const playerVelocity = player.getComponent(Velocity.name) as Velocity;
   const inputs = player.getComponent(Input.name) as Input;
 
   const playerMovement = () => {
-    const newVelocity = (() => {
+    const newVelocity: Velocity = (() => {
       const direction = new Vector2D(0, 0);
       const speedValue = (player.getComponent(Speed.name) as Speed).value;
-      const movementList = Object.entries(inputs.movement).filter(e => e[1]).map(e => e[0]);
-      if (movementList.includes('left')) {
+      const movementInputs = Object.keys(inputs.movement).filter(input => inputs.movement[input as keyof MovementInput]);
+      // const movementList = Object.entries(inputs.movement).filter(e => e[1]).map(e => e[0]);
+      if (movementInputs.includes('left')) {
         direction.x -= 1;
       }
-      if (movementList.includes('right')) {
+      if (movementInputs.includes('right')) {
         direction.x += 1
       }
-      if (movementList.includes('up')) {
+      if (movementInputs.includes('up')) {
         direction.y -= 1;
       }
-      if (movementList.includes('down')) {
+      if (movementInputs.includes('down')) {
         direction.y += 1
       }
       return Vector2DMath.normalize(direction, speedValue);
@@ -45,7 +47,7 @@ export const UserInputs = (entityManager: EntityManager): System => () => {
   const playerMouse = () => {
     const { mouse } = inputs;
     if (mouse.leftClick) {
-      const bullet = entityManager.addEntity('bullet');
+      const bullet = entityManager.addEntity(EntityType.BULLET);
       const bulletSpeed = BULLET_SETTINGS.speed;
       const bulletPosition = new Position(
         playerPosition.x + (playerSprite.width / 2),
