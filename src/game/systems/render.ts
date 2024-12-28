@@ -120,19 +120,14 @@ export const Render = (entityManager: EntityManager, gameScreen: HTMLCanvasEleme
 
   clearScreen();
   for (const entity of entityManager.getEntities()) {
-    switch (entity.tag) {
-      case EntityType.PLAYER:
-        drawPlayer(entity);
-        drawReticule(entity);
-        drawPlayerStats(entity)
-        break;
-      case EntityType.BULLET:
-        drawBullet(entity);
-        break;
-      case EntityType.ENEMY:
-        drawEnemy(entity);
-      default:
-        break;
+    if (entity.tag === EntityType.PLAYER) {
+      drawPlayer(entity);
+      drawReticule(entity);
+      drawPlayerStats(entity);
+    } else if (entity.tag === EntityType.BULLET) {
+      drawBullet(entity);
+    } else if (entity.tag === EntityType.ENEMY) {
+      drawEnemy(entity);
     }
   }
 }

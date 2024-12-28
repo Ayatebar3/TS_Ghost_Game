@@ -43,10 +43,12 @@ export const Collision = (entityManager: EntityManager, canvas: HTMLCanvasElemen
     for (const enemy of entityManager.getEntities(EntityType.ENEMY)) {
       const enemyPosition = enemy.getComponent(Position.name) as Position;
       const enemyDamage = enemy.getComponent(Damage.name) as Damage;
-      const didEnemyCollideWithPlayer = Vector2DMath.distSquared(
+
+      const didEnemyCollideWithPlayer = Boolean(Vector2DMath.distSquared(
         Vector2DMath.sum(enemyPosition, new Vector2D(enemyRadius * 0.5, enemyRadius * 0.5)),
         Vector2DMath.sum(playerPosition, new Vector2D(sprite.width * 0.5, sprite.height * 0.5)),
-      ) < (enemyRadius * enemyRadius) - enemyRadius
+      ) < (enemyRadius * enemyRadius) - enemyRadius);
+
       if (didEnemyCollideWithPlayer) {
         enemy.destroy();
         playerHealth.value -= enemyDamage.value
@@ -76,10 +78,11 @@ export const Collision = (entityManager: EntityManager, canvas: HTMLCanvasElemen
       const enemyPosition = enemy.getComponent(Position.name) as Position;
       const enemyHealth = enemy.getComponent(Health.name) as Health;
       const enemyScore = enemy.getComponent(Score.name) as Score;
-      const didBulletCollideWithEnemy = Vector2DMath.distSquared(
-        enemyPosition,
-        bulletPosition
-      ) < enemyRadius * enemyRadius
+
+      const didBulletCollideWithEnemy = Boolean(
+        Vector2DMath.distSquared(enemyPosition, bulletPosition) < enemyRadius * enemyRadius
+      );
+
       if (didBulletCollideWithEnemy) {
         bullet.destroy();
         enemyHealth.value -= bulletDamage.value;
@@ -90,8 +93,7 @@ export const Collision = (entityManager: EntityManager, canvas: HTMLCanvasElemen
       }
     }
   }
-  for (const bullet of entityManager.getEntities(EntityType.BULLET)) {
-    bulletCollisions(bullet);
-  }
+  
+  entityManager.getEntities(EntityType.BULLET).forEach(bulletCollisions);
   playerCollisions();
 }

@@ -13,17 +13,19 @@ import { ENEMY_SETTINGS, EntityType } from "./system_defaults";
 
 const MIN_VERTICES = 3;
 const MAX_VERTICES = 10;
+const spawnTime = ENEMY_SETTINGS.spawn_time;
+
+const getEnemySpawnCoordinates = (num = 0): Vector2D => {
+  const coordinatesList: Vector2D[] = ENEMY_SETTINGS.spawn_coordinates;
+  const modulo = coordinatesList.length;
+  const index = num % modulo;
+  return coordinatesList[index];
+}
+
 let previousTime = Date.now();
 
 export const EnemySpawner = (entityManager: EntityManager): System => () => {
-  const getEnemySpawnCoordinates = (num = 0): Vector2D => {
-    const coordinatesList: Vector2D[] = ENEMY_SETTINGS.spawn_coordinates;
-    const modulo = coordinatesList.length;
-    const index = num % modulo;
-    return coordinatesList[index];
-  }
   const currentTime = Date.now();
-  const spawnTime = ENEMY_SETTINGS.spawn_time;
   if (currentTime - previousTime > spawnTime) {
     const enemy = entityManager.addEntity(EntityType.ENEMY);
     const enemyRadius = ENEMY_SETTINGS.radius;

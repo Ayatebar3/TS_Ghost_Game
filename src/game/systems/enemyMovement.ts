@@ -16,13 +16,8 @@ export const EnemyMovement = (entityManager: EntityManager): System => () => {
     const enemyVelocity = enemy.getComponent(Velocity.name) as Velocity;
     const enemyPosition = enemy.getComponent(Position.name) as Position;
     const enemySpeed = ENEMY_SETTINGS.speed;
-    const newEnemyVelocity = Vector2DMath.normalize(
-      Vector2DMath.difference(
-        playerPosition,
-        enemyPosition
-      ),
-      enemySpeed
-    );
+    const direction = Vector2DMath.difference(playerPosition, enemyPosition);
+    const newEnemyVelocity = Vector2DMath.normalize(direction, enemySpeed);
     enemyVelocity.x = newEnemyVelocity.x;
     enemyVelocity.y = newEnemyVelocity.y;
     enemyPolygon.rotation += 0.05;
